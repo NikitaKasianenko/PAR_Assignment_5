@@ -2,6 +2,7 @@
 #include <string>
 #include <stack>
 #include <unordered_map>
+#include <cmath>
 #include <sstream>
 
 using namespace std;
@@ -22,7 +23,6 @@ public:
         }
         array[pointer++] = element;
     }
-
 
     string* begin() const {
         return array;
@@ -53,8 +53,9 @@ QueueList Tokenizated(const string& input) {
     QueueList tokens;
     string curToken;
 
-    for (char ch : input) {
-        if (ch == '.' || isdigit(ch) || isalpha(ch)) {
+    for (size_t i = 0; i < input.length(); ++i) {
+        char ch = input[i];
+        if (ch == '.' || isdigit(ch) || isalpha(ch) || (ch == '-' && (i == 0 || input[i - 1] == '('))) {
             curToken += ch;
         }
         else if (ch == '*' || ch == '+' || ch == '-' || ch == ',' || ch == '*' || ch == ')' || ch == '(' || ch == '^' || ch == '/') {
