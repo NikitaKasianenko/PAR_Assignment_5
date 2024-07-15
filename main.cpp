@@ -240,15 +240,21 @@ string replaceFunctions(const string& expression) {
 }
 
 int main() {
-    string expression;
-    getline(cin, expression);
+    while (true) {
+        string expression;
+        cout << "Enter expression: ";
+        getline(cin, expression);
 
+        if (expression.compare("exit") == 0) {
+            break;
+        }
 
-    expression = replaceFunctions(expression);
-    QueueList tokens = Tokenizated(expression);
-    QueueList rpn = ShuntingYard(tokens);
-    string result = Calculation(rpn);
+        expression = replaceFunctions(expression);
+        QueueList tokens = Tokenizated(expression);
+        QueueList rpn = ShuntingYard(tokens);
+        string result = Calculation(rpn);
 
-    cout << result << endl;
+        cout << "Result: " << result << endl;
+    }
     return 0;
 }
