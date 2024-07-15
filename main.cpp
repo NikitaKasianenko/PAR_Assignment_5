@@ -24,6 +24,35 @@ public:
         array[pointer++] = element;
     }
 
+    void Remove(const string& element) {
+        for (int i = 0; i < pointer; i++) {
+            if (array[i] == element) {
+                for (int j = i; j < pointer - 1; j++) {
+                    array[j] = array[j + 1];
+                }
+                pointer--;
+                break;
+            }
+        }
+    }
+
+    string GetAt(int index) const {
+        return array[index];
+    }
+
+    bool Contains(const string& element) const {
+        for (int i = 0; i < pointer; i++) {
+            if (array[i] == element) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    int Count() const {
+        return pointer;
+    }
+
     string* begin() const {
         return array;
     }
@@ -133,6 +162,10 @@ double min(double a, double b) {
     return (a < b) ? a : b;
 }
 
+double Abs(double a) {
+    return (a < 0) ? a * -1 : a;
+}
+
 string Calculation(QueueList& shuntingYard) {
     stack<string> resultStack;
 
@@ -143,34 +176,39 @@ string Calculation(QueueList& shuntingYard) {
             resultStack.push(element);
         }
         else {
-      
-            double digit2 = stod(resultStack.top());
-            resultStack.pop();
-            double digit1 = stod(resultStack.top());
-            resultStack.pop();
+            if (element == "a") {
+                double digit = stod(resultStack.top());
+                resultStack.pop();
+                resultStack.push(to_string(Abs(digit)));
+            }
+            else {
+                double digit2 = stod(resultStack.top());
+                resultStack.pop();
+                double digit1 = stod(resultStack.top());
+                resultStack.pop();
 
-            if (element == "+") {
-                resultStack.push(to_string(digit1 + digit2));
+                if (element == "+") {
+                    resultStack.push(to_string(digit1 + digit2));
+                }
+                else if (element == "-") {
+                    resultStack.push(to_string(digit1 - digit2));
+                }
+                else if (element == "*") {
+                    resultStack.push(to_string(digit1 * digit2));
+                }
+                else if (element == "/") {
+                    resultStack.push(to_string(digit1 / digit2));
+                }
+                else if (element == "^") {
+                    resultStack.push(to_string(pow(digit1, digit2)));
+                }
+                else if (element == "m") {
+                    resultStack.push(to_string(min(digit1, digit2)));
+                }
+                else if (element == "M") {
+                    resultStack.push(to_string(max(digit1, digit2)));
+                }
             }
-            else if (element == "-") {
-                resultStack.push(to_string(digit1 - digit2));
-            }
-            else if (element == "*") {
-                resultStack.push(to_string(digit1 * digit2));
-            }
-            else if (element == "/") {
-                resultStack.push(to_string(digit1 / digit2));
-            }
-            else if (element == "^") {
-                resultStack.push(to_string(pow(digit1, digit2)));
-            }
-            else if (element == "m") {
-                resultStack.push(to_string(min(digit1, digit2)));
-            }
-            else if (element == "M") {
-                resultStack.push(to_string(max(digit1, digit2)));
-            }
-            
         }
     }
 
@@ -191,6 +229,7 @@ string replaceFunctions(const string& expression) {
         result.replace(pos, 4, "M(");
         pos = result.find("max(", pos + 1);
     }
+
     pos = result.find("abs(");
     while (pos != string::npos) {
         result.replace(pos, 4, "a(");
